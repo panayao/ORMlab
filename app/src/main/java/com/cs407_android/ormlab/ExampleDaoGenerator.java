@@ -3,7 +3,7 @@
 /**
  * Created by njaunich on 2/18/16.
  */
-//package de.greenrobot.daogenerator.gentest;
+package de.greenrobot.daogenerator.gentest;
 import de.greenrobot.daogenerator.DaoGenerator;
 import de.greenrobot.daogenerator.Entity;
 import de.greenrobot.daogenerator.Property;

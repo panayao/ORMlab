@@ -15,6 +15,9 @@ import android.support.v7.app.AppCompatActivity;
 
 import java.util.ArrayList;
 
+import de.greenrobot.daogenerator.*;
+import de.greenrobot.*;
+
 public class MainActivity extends AppCompatActivity {
 
     EditText firstName, lastName, email, phone;
@@ -62,6 +65,8 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+
+        //DevOpenHelper ex_database_helper_obj = new DaoMaster.DevOpenHelper(SharedVariables.globalContext, "ORM.sqlite", null);
 
 
 
