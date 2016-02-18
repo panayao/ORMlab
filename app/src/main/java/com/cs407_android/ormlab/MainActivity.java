@@ -1,7 +1,9 @@
 package com.cs407_android.ormlab;
 
 import android.content.Context;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -10,13 +12,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
-
-import android.support.v7.app.AppCompatActivity;
-
-import java.util.ArrayList;
-
-import de.greenrobot.daogenerator.*;
-import de.greenrobot.*;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -27,6 +23,17 @@ public class MainActivity extends AppCompatActivity {
     Context context;
 
     public static ArrayList<String> guestList;
+
+    //Uncomment once ready
+    GuestBookDatabase.DaoMaster.DevOpenHelper guestBookDB_helper_obj;
+    SQLiteDatabase guestBookDB;
+    GuestBookDatabase.DaoMaster daoMaster;
+    GuestBookDatabase.DaoSession daoSession;
+    GuestBookDatabase.GuestDao guestDao;
+    GuestBookDatabase.GuestListDao guestListDao;
+    List<GuestBookDatabase.Guest> DBguestList;
+    long ids = 0;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +56,40 @@ public class MainActivity extends AppCompatActivity {
         adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, guestList);
         listView.setAdapter(adapter);
 
+        //TODO: Implement database setup and save+retrieval
+        guestBookDB_helper_obj = new GuestBookDatabase.DaoMaster.DevOpenHelper(context, "ORM.sqlite", null);
+        guestBookDB = guestBookDB_helper_obj.getWritableDatabase();
+
+        //Get DaoMaster
+        daoMaster = new GuestBookDatabase.DaoMaster(guestBookDB);
+
+        //Create database and tables
+        daoMaster.createAllTables(guestBookDB, true);
+
+        //Create DaoSession
+        daoSession = daoMaster.newSession();
+
+        //Create customer addition/removal instances
+        guestDao = daoSession.getGuestDao();
+        guestListDao = daoSession.getGuestListDao();
+
+        if (guestDao.queryBuilder().where(GuestBookDatabase.GuestDao.Properties.Id.eq(1)).list() != null) {
+            DBguestList = guestDao.queryBuilder().where(GuestBookDatabase.GuestDao.Properties.Id.eq(1)).list();
+
+            for (GuestBookDatabase.Guest guest : DBguestList)
+            {
+                if (guest == null)
+                {
+                    return;
+                }
+                Toast.makeText(context, "Added Guests", Toast.LENGTH_SHORT).show();
+                guestList.add(guest.getFirstName() + " " + guest.getLastName());
+            }
+        }
+
+        adapter.notifyDataSetChanged();
+
+
         //set up submit button
         submitButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -60,15 +101,16 @@ public class MainActivity extends AppCompatActivity {
 
                 guestList.add(name);
 
+                GuestBookDatabase.Guest newGuest = new GuestBookDatabase.Guest((long)1, firstName.getText().toString(),
+                        lastName.getText().toString(), email.getText().toString(), phone.getText().toString());
+
+                DBguestList.add(newGuest);
+                daoSession.clear();
                 adapter.notifyDataSetChanged();
 
 
             }
         });
-
-        //DevOpenHelper ex_database_helper_obj = new DaoMaster.DevOpenHelper(SharedVariables.globalContext, "ORM.sqlite", null);
-
-
 
 
     }

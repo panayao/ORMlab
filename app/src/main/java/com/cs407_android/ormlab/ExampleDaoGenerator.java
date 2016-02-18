@@ -12,9 +12,9 @@ import de.greenrobot.daogenerator.ToMany;
 
 public class ExampleDaoGenerator {
     public static void main(String[] args) throws Exception {
-        Schema schema = new Schema(3, "com.cs407_android.ormlab"); //Scheme for GreenDAO ORM
+        Schema schema = new Schema(3, "GuestBookDatabase"); //Scheme for GreenDAO ORM
         createDB(schema);
-        new DaoGenerator().generateAll(schema, "../DaoExampleGenerator/src-gen");
+        new DaoGenerator().generateAll(schema, "./app/src/main/java/com/cs407_android/ormlab/");
         //where you want to store the generated classes.
     }
 
@@ -28,7 +28,7 @@ public class ExampleDaoGenerator {
         guest.addStringProperty("email");
         guest.addStringProperty("phone");
 
-        //Order table
+        //guestList table
         Entity guestList = schema.addEntity("GuestList");
         guestList.setTableName("GuestList");
         guestList.addIdProperty();
@@ -36,7 +36,7 @@ public class ExampleDaoGenerator {
         Property addDate = guestList.addDateProperty("date").getProperty();
         Property guestId = guestList.addLongProperty("guestId").notNull().getProperty();
 
-        //Add one-to-one relationship between guest and guestId
+        //Add one-to-one relationship between guestList and the guest entity
         guestList.addToOne(guest, guestId);
 
         //Add one-to-many relationship between guest and guestList
@@ -45,8 +45,6 @@ public class ExampleDaoGenerator {
         //Set name of Entity
         guestToGuestList.setName("GuestList");
 
-        //Set ordering of entries within Entity
-        guestToGuestList.orderAsc(addDate);
 
     }
 
