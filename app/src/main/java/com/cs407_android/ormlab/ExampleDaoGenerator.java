@@ -5,9 +5,7 @@ package com.cs407_android.ormlab;
  */
 import de.greenrobot.daogenerator.DaoGenerator;
 import de.greenrobot.daogenerator.Entity;
-import de.greenrobot.daogenerator.Property;
 import de.greenrobot.daogenerator.Schema;
-import de.greenrobot.daogenerator.ToMany;
 
 
 public class ExampleDaoGenerator {
@@ -28,7 +26,7 @@ public class ExampleDaoGenerator {
         guest.addStringProperty("email");
         guest.addStringProperty("phone");
 
-        //guestList table
+        /* //guestList table
         Entity guestList = schema.addEntity("GuestList");
         guestList.setTableName("GuestList");
         guestList.addIdProperty();
@@ -43,7 +41,7 @@ public class ExampleDaoGenerator {
         ToMany guestToGuestList = guestList.addToMany(guest, guestId);
 
         //Set name of Entity
-        guestToGuestList.setName("GuestList");
+        guestToGuestList.setName("GuestList"); */
 
 
     }

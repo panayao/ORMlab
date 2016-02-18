@@ -1,6 +1,5 @@
 package GuestBookDatabase;
 
-import java.util.List;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteStatement;
@@ -8,8 +7,6 @@ import android.database.sqlite.SQLiteStatement;
 import de.greenrobot.dao.AbstractDao;
 import de.greenrobot.dao.DaoConfig;
 import de.greenrobot.dao.Property;
-import de.greenrobot.dao.Query;
-import de.greenrobot.dao.QueryBuilder;
 
 import GuestBookDatabase.Guest;
 
@@ -27,10 +24,8 @@ public class GuestDao extends AbstractDao<Guest, Long> {
         public final static Property LastName = new Property(2, String.class, "lastName", false, "LAST_NAME");
         public final static Property Email = new Property(3, String.class, "email", false, "EMAIL");
         public final static Property Phone = new Property(4, String.class, "phone", false, "PHONE");
-        public final static Property GuestId = new Property(5, long.class, "guestId", false, "GUEST_ID");
     };
 
-    private Query<Guest> guestList_GuestListQuery;
 
     public GuestDao(DaoConfig config) {
         super(config);
@@ -47,8 +42,7 @@ public class GuestDao extends AbstractDao<Guest, Long> {
                 "'FIRST_NAME' TEXT," + // 1: firstName
                 "'LAST_NAME' TEXT," + // 2: lastName
                 "'EMAIL' TEXT," + // 3: email
-                "'PHONE' TEXT," + // 4: phone
-                "'GUEST_ID' INTEGER NOT NULL );"; // 5: guestId
+                "'PHONE' TEXT);"; // 4: phone
         db.execSQL(sql);
     }
 
@@ -140,16 +134,4 @@ public class GuestDao extends AbstractDao<Guest, Long> {
         return true;
     }
     
-    /** Internal query to resolve the "GuestList" to-many relationship of GuestList. */
-    public synchronized List<Guest> _queryGuestList_GuestList(long guestId) {
-        if (guestList_GuestListQuery == null) {
-            QueryBuilder<Guest> queryBuilder = queryBuilder();
-            queryBuilder.where(Properties.GuestId.eq(guestId));
-            guestList_GuestListQuery = queryBuilder.build();
-        } else {
-            guestList_GuestListQuery.setParameter(0, guestId);
-        }
-        return guestList_GuestListQuery.list();
-    }
-
 }

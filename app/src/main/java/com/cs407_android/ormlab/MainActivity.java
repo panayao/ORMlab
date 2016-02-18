@@ -1,6 +1,7 @@
 package com.cs407_android.ormlab;
 
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -12,7 +13,6 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -30,8 +30,6 @@ public class MainActivity extends AppCompatActivity {
     GuestBookDatabase.DaoMaster daoMaster;
     GuestBookDatabase.DaoSession daoSession;
     GuestBookDatabase.GuestDao guestDao;
-    GuestBookDatabase.GuestListDao guestListDao;
-    List<GuestBookDatabase.Guest> DBguestList;
     long ids = 0;
 
 
@@ -57,7 +55,7 @@ public class MainActivity extends AppCompatActivity {
         listView.setAdapter(adapter);
 
         //TODO: Implement database setup and save+retrieval
-        guestBookDB_helper_obj = new GuestBookDatabase.DaoMaster.DevOpenHelper(context, "ORM.sqlite", null);
+        guestBookDB_helper_obj = new GuestBookDatabase.DaoMaster.DevOpenHelper(this, "ORM.sqlite", null);
         guestBookDB = guestBookDB_helper_obj.getWritableDatabase();
 
         //Get DaoMaster
@@ -71,10 +69,11 @@ public class MainActivity extends AppCompatActivity {
 
         //Create customer addition/removal instances
         guestDao = daoSession.getGuestDao();
-        guestListDao = daoSession.getGuestListDao();
+
+        //guestDao.queryBuilder().where(GuestBookDatabase.GuestDao.Properties.Id.eq(1)).list();
 
         if (guestDao.queryBuilder().where(GuestBookDatabase.GuestDao.Properties.Id.eq(1)).list() != null) {
-            DBguestList = guestDao.queryBuilder().where(GuestBookDatabase.GuestDao.Properties.Id.eq(1)).list();
+
 
             for (GuestBookDatabase.Guest guest : DBguestList)
             {
@@ -100,12 +99,12 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(context, "added " + name, Toast.LENGTH_SHORT).show();
 
                 guestList.add(name);
-
-                GuestBookDatabase.Guest newGuest = new GuestBookDatabase.Guest((long)1, firstName.getText().toString(),
+                /*
+                GuestBookDatabase.Guest newGuest = new GuestBookDatabase.Guest(null, firstName.getText().toString(),
                         lastName.getText().toString(), email.getText().toString(), phone.getText().toString());
 
-                DBguestList.add(newGuest);
-                daoSession.clear();
+                guestDao.insert(newGuest);
+                daoSession.clear(); */
                 adapter.notifyDataSetChanged();
 
 
