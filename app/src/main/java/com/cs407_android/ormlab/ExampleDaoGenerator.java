@@ -8,13 +8,8 @@ import de.greenrobot.daogenerator.Entity;
 import de.greenrobot.daogenerator.Property;
 import de.greenrobot.daogenerator.Schema;
 import de.greenrobot.daogenerator.ToMany;
-/**
- * Generates entities and DAOs for the example project DaoExample.
- *
- * Run it as a Java application (not Android).
- *
- * @author Markus
- */
+
+
 public class ExampleDaoGenerator {
     public static void main(String[] args) throws Exception {
         Schema schema = new Schema(3, "com.cs407_android.ormlab"); //Scheme for GreenDAO ORM
