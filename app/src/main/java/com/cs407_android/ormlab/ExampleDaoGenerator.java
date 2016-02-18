@@ -3,7 +3,7 @@
 /**
  * Created by njaunich on 2/18/16.
  */
-package de.greenrobot.daogenerator.gentest;
+//package de.greenrobot.daogenerator.gentest;
 import de.greenrobot.daogenerator.DaoGenerator;
 import de.greenrobot.daogenerator.Entity;
 import de.greenrobot.daogenerator.Property;
@@ -24,7 +24,7 @@ public class ExampleDaoGenerator {
         //where you want to store the generated classes.
     }
 
-    private  void createDB(Schema schema) {
+    private static void createDB(Schema schema) {
 
         //Add Guest
         Entity guest = schema.addEntity("Guest");
@@ -39,14 +39,14 @@ public class ExampleDaoGenerator {
         guestList.setTableName("GuestList");
         guestList.addIdProperty();
 
-        Property addDate = order.addDateProperty("date").getProperty();
+        Property addDate = guestList.addDateProperty("date").getProperty();
         Property guestId = guestList.addLongProperty("guestId").notNull().getProperty();
 
         //Add one-to-one relationship between guest and guestId
         guestList.addToOne(guest, guestId);
 
         //Add one-to-many relationship between guest and guestList
-        ToMany guestToGuestList = customer.addToMany(guest, guestId);
+        ToMany guestToGuestList = guestList.addToMany(guest, guestId);
 
         //Set name of Entity
         guestToGuestList.setName("GuestList");
