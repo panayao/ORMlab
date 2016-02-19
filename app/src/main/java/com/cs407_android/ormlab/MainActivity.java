@@ -94,16 +94,16 @@ public class MainActivity extends AppCompatActivity {
         //Get DaoMaster
         daoMaster = new DaoMaster(guestBookDB);
 
-        //Create database and tables
-        daoMaster.createAllTables(guestBookDB, true);
+        //TODO: Create database and tables if non existent
+        //Use methods in DaoMaster to create initial database table
 
-        //Create DaoSession
-        daoSession = daoMaster.newSession();
+        //TODO: Create DaoSession instance
+        //Use method in DaoMaster to create a database access session
 
-        //Create customer addition/removal instances
-        guestDao = daoSession.getGuestDao();
+        //TODO: From DaoSession instance, get instance of GuestDao
 
-
+        //TODO: Get list of Guest objects in database using QueryBuilder
+        //HINT: All instances of Guest objects will have their Display property set equal to true
         if (guestDao.queryBuilder().where(
             GuestDao.Properties.Display.eq(true)).list() == null)
         {
