@@ -10,9 +10,9 @@ import de.greenrobot.daogenerator.Schema;
 
 public class ExampleDaoGenerator {
     public static void main(String[] args) throws Exception {
-        Schema schema = new Schema(3, "GuestBookDatabase"); //Scheme for GreenDAO ORM
+        Schema schema = new Schema(1, "com.cs407_android.ormlab"); //Scheme for GreenDAO ORM
         createDB(schema);
-        new DaoGenerator().generateAll(schema, "./app/src/main/java/com/cs407_android/ormlab/");
+        new DaoGenerator().generateAll(schema, "./app/src/main/java/");
         //where you want to store the generated classes.
     }
 
@@ -25,6 +25,7 @@ public class ExampleDaoGenerator {
         guest.addStringProperty("lastName");
         guest.addStringProperty("email");
         guest.addStringProperty("phone");
+        guest.addBooleanProperty("display");
 
         /* //guestList table
         Entity guestList = schema.addEntity("GuestList");
