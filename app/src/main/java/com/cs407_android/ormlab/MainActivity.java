@@ -25,16 +25,15 @@ public class MainActivity extends AppCompatActivity {
 
     public static ArrayList<String> guestList;
 
-    //Uncomment once ready
-
+    //TODO: ORM variables; uncomment once ready
+    /*
     DaoMaster.DevOpenHelper guestBookDBHelper;
     SQLiteDatabase guestBookDB;
     DaoMaster daoMaster;
     DaoSession daoSession;
     GuestDao guestDao;
     List<Guest> guestListFromDB;
-
-    boolean firstGuestGenerated = false;
+    */
 
 
     @Override
@@ -58,7 +57,7 @@ public class MainActivity extends AppCompatActivity {
         adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, guestList);
         listView.setAdapter(adapter);
 
-        initDatabase();
+        //initDatabase();
 
         adapter.notifyDataSetChanged();
 
@@ -74,7 +73,7 @@ public class MainActivity extends AppCompatActivity {
 
                 guestList.add(name);
 
-                saveGuest();
+                //saveGuest();
 
                 adapter.notifyDataSetChanged();
 
@@ -85,7 +84,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private void initDatabase()
+    /* private void initDatabase()
     {
         guestBookDBHelper = new DaoMaster.DevOpenHelper(this, "ORM.sqlite", null);
         guestBookDB = guestBookDBHelper.getWritableDatabase();
@@ -154,5 +153,6 @@ public class MainActivity extends AppCompatActivity {
 
         //TODO: From DaoSession instance, get instance of GuestDao
         //guestDao =
-    }
+
+    } */
 }
