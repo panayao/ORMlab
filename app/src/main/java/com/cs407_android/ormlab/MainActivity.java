@@ -13,6 +13,7 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -26,12 +27,14 @@ public class MainActivity extends AppCompatActivity {
 
     //Uncomment once ready
 
-    DaoMaster.DevOpenHelper guestBookDB_helper_obj;
+    DaoMaster.DevOpenHelper guestBookDBHelper;
     SQLiteDatabase guestBookDB;
     DaoMaster daoMaster;
     DaoSession daoSession;
     GuestDao guestDao;
     List<Guest> guestListFromDB;
+
+    boolean firstGuestGenerated = false;
 
 
     @Override
@@ -70,7 +73,10 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(context, "added " + name, Toast.LENGTH_SHORT).show();
 
                 guestList.add(name);
+
                 saveGuest();
+                closeReopenDatabase();
+
                 adapter.notifyDataSetChanged();
 
 
@@ -82,9 +88,8 @@ public class MainActivity extends AppCompatActivity {
 
     private void initDatabase()
     {
-        //TODO: Implement database setup and save+retrieval
-        guestBookDB_helper_obj = new DaoMaster.DevOpenHelper(this, "ORM.sqlite", null);
-        guestBookDB = guestBookDB_helper_obj.getWritableDatabase();
+        guestBookDBHelper = new DaoMaster.DevOpenHelper(this, "ORM.sqlite", null);
+        guestBookDB = guestBookDBHelper.getWritableDatabase();
 
         //Get DaoMaster
         daoMaster = new DaoMaster(guestBookDB);
@@ -98,11 +103,11 @@ public class MainActivity extends AppCompatActivity {
         //Create customer addition/removal instances
         guestDao = daoSession.getGuestDao();
 
-        //guestDao.queryBuilder().where(GuestBookDatabase.GuestDao.Properties.Id.eq(1)).list();
+
         if (guestDao.queryBuilder().where(
             GuestDao.Properties.Display.eq(true)).list() == null)
         {
-            return;
+            closeReopenDatabase();
         }
         guestListFromDB = guestDao.queryBuilder().where(
                 GuestDao.Properties.Display.eq(true)).list();
@@ -115,18 +120,47 @@ public class MainActivity extends AppCompatActivity {
                 {
                     return;
                 }
-                Toast.makeText(context, "Added Guests", Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, "Added Guests from Database", Toast.LENGTH_SHORT).show();
                 guestList.add(guest.getFirstName() + " " + guest.getLastName());
             }
             adapter.notifyDataSetChanged();
         }
     }
+
     private void saveGuest()
     {
-        Guest newGuest = new Guest(null, firstName.getText().toString(),
+        Random rand = new Random();
+        Guest newGuest = new Guest(rand.nextLong(), firstName.getText().toString(),
             lastName.getText().toString(), email.getText().toString(), phone.getText().toString(), true);
-
         guestDao.insert(newGuest);
+    }
+
+    private void closeDatabase()
+    {
         daoSession.clear();
+        guestBookDB.close();
+        guestBookDBHelper.close();
+    }
+
+    private void closeReopenDatabase()
+    {
+        daoSession.clear();
+        guestBookDB.close();
+        guestBookDBHelper.close();
+
+        guestBookDBHelper = new DaoMaster.DevOpenHelper(this, "ORM.sqlite", null);
+        guestBookDB = guestBookDBHelper.getWritableDatabase();
+
+        //Get DaoMaster
+        daoMaster = new DaoMaster(guestBookDB);
+
+        //Create database and tables
+        daoMaster.createAllTables(guestBookDB, true);
+
+        //Create DaoSession
+        daoSession = daoMaster.newSession();
+
+        //Create customer addition/removal instances
+        guestDao = daoSession.getGuestDao();
     }
 }
