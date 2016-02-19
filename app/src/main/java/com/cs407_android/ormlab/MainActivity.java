@@ -26,15 +26,12 @@ public class MainActivity extends AppCompatActivity {
     public static ArrayList<String> guestList;
 
     //Uncomment once ready
-
     DaoMaster.DevOpenHelper guestBookDBHelper;
     SQLiteDatabase guestBookDB;
     DaoMaster daoMaster;
     DaoSession daoSession;
     GuestDao guestDao;
     List<Guest> guestListFromDB;
-
-    boolean firstGuestGenerated = false;
 
 
     @Override
@@ -75,7 +72,6 @@ public class MainActivity extends AppCompatActivity {
                 guestList.add(name);
 
                 saveGuest();
-                closeReopenDatabase();
 
                 adapter.notifyDataSetChanged();
 
@@ -144,9 +140,8 @@ public class MainActivity extends AppCompatActivity {
 
     private void closeReopenDatabase()
     {
-        daoSession.clear();
-        guestBookDB.close();
-        guestBookDBHelper.close();
+
+        closeDatabase();
 
         guestBookDBHelper = new DaoMaster.DevOpenHelper(this, "ORM.sqlite", null);
         guestBookDB = guestBookDBHelper.getWritableDatabase();
