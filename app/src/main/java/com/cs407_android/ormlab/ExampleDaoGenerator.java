@@ -13,7 +13,6 @@ public class ExampleDaoGenerator {
         Schema schema = new Schema(1, "com.cs407_android.ormlab"); //Scheme for GreenDAO ORM
         createDB(schema);
         new DaoGenerator().generateAll(schema, "./app/src/main/java/");
-        //where you want to store the generated classes.
     }
 
     private static void createDB(Schema schema) {
@@ -21,29 +20,9 @@ public class ExampleDaoGenerator {
         //Add Guest
         Entity guest = schema.addEntity("Guest");
         guest.addIdProperty();
-        guest.addStringProperty("firstName");
-        guest.addStringProperty("lastName");
-        guest.addStringProperty("email");
-        guest.addStringProperty("phone");
-        guest.addBooleanProperty("display");
-
-        /* //guestList table
-        Entity guestList = schema.addEntity("GuestList");
-        guestList.setTableName("GuestList");
-        guestList.addIdProperty();
-
-        Property addDate = guestList.addDateProperty("date").getProperty();
-        Property guestId = guestList.addLongProperty("guestId").notNull().getProperty();
-
-        //Add one-to-one relationship between guestList and the guest entity
-        guestList.addToOne(guest, guestId);
-
-        //Add one-to-many relationship between guest and guestList
-        ToMany guestToGuestList = guestList.addToMany(guest, guestId);
-
-        //Set name of Entity
-        guestToGuestList.setName("GuestList"); */
-
+        //TODO: Add the following string properties to the Guest entity
+        //TODO: (cont.) firstName, lastName, email, phone
+        //TODO: Add a Boolean property named "display" (this will always be set to true)
 
     }
 

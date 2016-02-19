@@ -75,7 +75,6 @@ public class MainActivity extends AppCompatActivity {
                 guestList.add(name);
 
                 saveGuest();
-                closeReopenDatabase();
 
                 adapter.notifyDataSetChanged();
 
@@ -96,43 +95,40 @@ public class MainActivity extends AppCompatActivity {
 
         //TODO: Create database and tables if non existent
         //Use methods in DaoMaster to create initial database table
+        //
 
         //TODO: Create DaoSession instance
         //Use method in DaoMaster to create a database access session
+        //daoSession =
 
         //TODO: From DaoSession instance, get instance of GuestDao
+        //guestDao =
 
         //TODO: Get list of Guest objects in database using QueryBuilder
+        //TODO: (cont.) If list is null, then database tables were created for first time in
+        //TODO: (cont.) previous lines, so call "closeReopenDatabase()"
         //HINT: All instances of Guest objects will have their Display property set equal to true
-        if (guestDao.queryBuilder().where(
-            GuestDao.Properties.Display.eq(true)).list() == null)
-        {
-            closeReopenDatabase();
-        }
-        guestListFromDB = guestDao.queryBuilder().where(
-                GuestDao.Properties.Display.eq(true)).list();
+        //guestListFromDB =
 
-        if (guestListFromDB != null) {
+        //TODO: Add all Guest objects from List to guestList ArrayList and use
+        //TODO: (cont.) "adapter.notifyDataSetChanged()" to update list
 
-            for (Guest guest : guestListFromDB)
-            {
-                if (guest == null)
-                {
-                    return;
-                }
-                Toast.makeText(context, "Added Guests from Database", Toast.LENGTH_SHORT).show();
-                guestList.add(guest.getFirstName() + " " + guest.getLastName());
-            }
-            adapter.notifyDataSetChanged();
-        }
     }
 
     private void saveGuest()
     {
+        //Generate random Id for Guest object to place in database
         Random rand = new Random();
-        Guest newGuest = new Guest(rand.nextLong(), firstName.getText().toString(),
-            lastName.getText().toString(), email.getText().toString(), phone.getText().toString(), true);
-        guestDao.insert(newGuest);
+
+        //TODO: Create Guest instance using data from MainActivity
+        //TODO: (cont.) Use rand.nextLong() for Guest object Id
+        //
+
+        //TODO: Insert Guest instance into guestDao
+        //
+
+        //Close and reopen database to ensure Guest object is saved
+        closeReopenDatabase();
     }
 
     private void closeDatabase()
@@ -144,9 +140,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void closeReopenDatabase()
     {
-        daoSession.clear();
-        guestBookDB.close();
-        guestBookDBHelper.close();
+        closeDatabase();
 
         guestBookDBHelper = new DaoMaster.DevOpenHelper(this, "ORM.sqlite", null);
         guestBookDB = guestBookDBHelper.getWritableDatabase();
@@ -154,13 +148,11 @@ public class MainActivity extends AppCompatActivity {
         //Get DaoMaster
         daoMaster = new DaoMaster(guestBookDB);
 
-        //Create database and tables
-        daoMaster.createAllTables(guestBookDB, true);
+        //TODO: Create DaoSession instance
+        //Use method in DaoMaster to create a database access session
+        //daoSession =
 
-        //Create DaoSession
-        daoSession = daoMaster.newSession();
-
-        //Create customer addition/removal instances
-        guestDao = daoSession.getGuestDao();
+        //TODO: From DaoSession instance, get instance of GuestDao
+        //guestDao =
     }
 }
